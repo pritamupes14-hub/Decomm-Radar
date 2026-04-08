@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>European Decommissioning Radar | Gemini Scan</title>
+    <meta name="description" content="Dashboard identifying high-priority industrial decommissioning platforms across Europe (1-5 years).">
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Outfit:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- SIMULATION OVERLAY -->
+        <div id="simulation-overlay" class="overlay active">
+            <div class="scanner-container">
+                <div class="gemini-logo">✧</div>
+                <h1 class="scanning-title">Initializing Gemini Intelligence...</h1>
+                <div class="terminal-box" id="terminal">
+                    <!-- Logs will be injected here -->
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN DASHBOARD -->
+        <main class="dashboard hidden" id="dashboard">
+            <nav class="sidebar">
+                <div class="sidebar-brand">
+                    <h2 class="evalueserve-text-logo">EVALUESERVE</h2>
+                    <p class="sidebar-subtitle">Europe <br><span class="accent">Decommissioning Radar</span></p>
+                </div>
+                <ul class="nav-links" id="sidebar-nav">
+                    <li class="active"><button id="nav-overview" class="nav-btn">Overview</button></li>
+                    <li><button id="nav-assets" class="nav-btn">Target Assets</button></li>
+                    <li><button id="nav-sectors" class="nav-btn">Sectors</button></li>
+                    <li><button id="nav-export" class="nav-btn">Export Report</button></li>
+                </ul>
+            </nav>
+
+            <section class="main-content">
+                <header class="topbar">
+                    <div>
+                        <h1>European Decommissioning Radar</h1>
+                        <p class="subtitle">1-5 Year Projection (Offshore Wind, Oil & Gas, Chem/Petrochem, Bioenergy)</p>
+                    </div>
+                    <div class="header-actions">
+                        <button class="btn primary-btn" id="refresh-scan-btn">Initiate New Scan</button>
+                    </div>
+                </header>
+
+                <!-- KPIs -->
+                <div class="kpi-grid">
+                    <div class="kpi-card glass">
+                        <h3>High-Risk Assets Identified</h3>
+                        <div class="kpi-value" id="kpi-total-assets">--</div>
+                    </div>
+                    <div class="kpi-card glass">
+                        <h3>Estimated Remediation Value</h3>
+                        <div class="kpi-value" id="kpi-total-value">--</div>
+                    </div>
+                    <div class="kpi-card glass">
+                        <h3>Top Sector</h3>
+                        <div class="kpi-value" id="kpi-top-sector">--</div>
+                    </div>
+                    <div class="kpi-card glass">
+                        <h3>Next 12 Months</h3>
+                        <div class="kpi-value warning" id="kpi-critical">--</div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="charts-grid" id="section-sectors">
+                    <div class="chart-container glass">
+                        <h3>Assets by Target Year</h3>
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                    <div class="chart-container glass">
+                        <h3>Assets by Sector</h3>
+                        <canvas id="sectorChart"></canvas>
+                    </div>
+                    <div class="chart-container glass span-2">
+                        <h3>Assets by Country</h3>
+                        <canvas id="countryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Asset Table -->
+                <div class="table-container glass" id="section-assets">
+                    <div class="table-header">
+                        <h3>Most Promising Target Platforms</h3>
+                        <div class="filters">
+                            <button class="filter-btn active" data-filter="all">All</button>
+                            <button class="filter-btn" data-filter="Oil & Gas">Oil & Gas</button>
+                            <button class="filter-btn" data-filter="Wind">Wind</button>
+                            <button class="filter-btn" data-filter="Petrochemical">Petrochemical</button>
+                            <button class="filter-btn" data-filter="Chemical">Chemical</button>
+                            <button class="filter-btn" data-filter="Bioenergy">Bioenergy</button>
+                        </div>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Asset Name</th>
+                                <th>Sector</th>
+                                <th>Country</th>
+                                <th>Decomm. Year</th>
+                                <th>Est. Value (Mil €)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="asset-table-body">
+                            <!-- Rows injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+
+        <!-- ANALYSIS MODAL -->
+        <div id="analysis-modal" class="modal-overlay hidden">
+            <div class="modal-content glass">
+                <div class="modal-header">
+                    <h2 id="modal-asset-name">Asset Name</h2>
+                    <button id="modal-close-btn" class="close-btn">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="mbb-analysis">
+                        <h3>Strategic Rationale & Inclusion Drivers</h3>
+                        <div id="modal-analysis-text" class="analysis-text">
+                            <!-- Injected by JS -->
+                        </div>
+                    </div>
+                    <div class="modal-contact">
+                        <p>To request more information, contact <a href="mailto:pritam.singh@evalueserve.com" class="contact-link">pritam.singh@evalueserve.com</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Scripts -->
+    <script src="mockData.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
