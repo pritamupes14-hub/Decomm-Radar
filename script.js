@@ -313,15 +313,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 4. Sidebar Navigation Logic
-    const navOverview = document.getElementById('nav-overview');
     const navAssets = document.getElementById('nav-assets');
-    const navSectors = document.getElementById('nav-sectors');
     const navNews = document.getElementById('nav-news');
+    const navTenders = document.getElementById('nav-tenders');
     const navExport = document.getElementById('nav-export');
-    const navBtns = [navOverview, navAssets, navSectors, navNews, navExport];
+    const navBtns = [navAssets, navNews, navTenders, navExport];
 
     const dashboardCore = document.getElementById('dashboard-core-views');
     const sectionNews = document.getElementById('section-news');
+    const sectionTenders = document.getElementById('section-tenders');
 
     function setActiveNav(btn) {
         navBtns.forEach(b => {
@@ -331,35 +331,30 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function toggleView(view) {
+        dashboardCore.classList.add('hidden');
+        sectionNews.classList.add('hidden');
+        if(sectionTenders) sectionTenders.classList.add('hidden');
+
         if(view === 'dashboard') {
             dashboardCore.classList.remove('hidden');
-            sectionNews.classList.add('hidden');
         } else if (view === 'news') {
-            dashboardCore.classList.add('hidden');
             sectionNews.classList.remove('hidden');
-            renderNews();
+            renderFeed(mockNews, 'news-feed');
+            if(googleChartsLoaded) drawMap(mockNews, 'news-map', '#993584');
+        } else if (view === 'tenders') {
+            sectionTenders.classList.remove('hidden');
+            renderFeed(mockTenders, 'tenders-feed');
+            if(googleChartsLoaded) drawMap(mockTenders, 'tenders-map', '#3265aa');
         }
     }
 
-    navOverview.addEventListener('click', () => {
-        setActiveNav(navOverview);
-        toggleView('dashboard');
-        document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
-    });
-
-    navSectors.addEventListener('click', () => {
-        setActiveNav(navSectors);
-        toggleView('dashboard');
-        const section = document.getElementById('section-sectors');
-        if(section) document.querySelector('.main-content').scrollTo({ top: section.offsetTop - 30, behavior: 'smooth' });
-    });
-
-    navAssets.addEventListener('click', () => {
-        setActiveNav(navAssets);
-        toggleView('dashboard');
-        const section = document.getElementById('section-assets');
-        if(section) document.querySelector('.main-content').scrollTo({ top: section.offsetTop - 30, behavior: 'smooth' });
-    });
+    if(navAssets) {
+        navAssets.addEventListener('click', () => {
+            setActiveNav(navAssets);
+            toggleView('dashboard');
+            document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
 
     if(navNews) {
         navNews.addEventListener('click', () => {
@@ -368,75 +363,128 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 5. News Rendering & Date Filter Logic
-    function renderNews(filteredNews = mockNews) {
-        const feed = document.getElementById('news-feed');
+    if(navTenders) {
+        navTenders.addEventListener('click', () => {
+            setActiveNav(navTenders);
+            toggleView('tenders');
+        });
+    }
+
+    // 5. Feed Rendering & Date Filter Logic
+    function renderFeed(data, containerId) {
+        const feed = document.getElementById(containerId);
         if(!feed) return;
         feed.innerHTML = '';
         
-        if(filteredNews.length === 0) {
-            feed.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1;">No news found for the selected date range.</p>';
+        if(data.length === 0) {
+            feed.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1;">No data found for the selected parameters.</p>';
             return;
         }
 
-        filteredNews.forEach(news => {
+        // Sort by date (latest first)
+        const sortedData = [...data].sort((a,b) => new Date(b.date) - new Date(a.date));
+
+        sortedData.forEach(item => {
             let badgeClass = 'bioenergy';
-            if(news.sector === 'Oil & Gas') badgeClass = 'oil';
-            if(news.sector === 'Wind') badgeClass = 'wind';
-            if(news.sector === 'Petrochemical') badgeClass = 'petrochemical';
-            if(news.sector === 'Chemical') badgeClass = 'chemical';
+            if(item.sector === 'Oil & Gas') badgeClass = 'oil';
+            if(item.sector === 'Wind') badgeClass = 'wind';
+            if(item.sector === 'Petrochemical') badgeClass = 'petrochemical';
+            if(item.sector === 'Chemical') badgeClass = 'chemical';
 
             feed.innerHTML += `
                 <div class="news-card">
                     <div class="news-meta">
-                        <span class="sector-badge ${badgeClass}">${news.category}</span>
-                        <span>${news.date}</span>
+                        <span class="sector-badge ${badgeClass}">${item.category}</span>
+                        <span>${item.date}</span>
                     </div>
-                    <h3 class="news-title">${news.title}</h3>
-                    <div class="news-source">${news.source}</div>
-                    <a href="${news.link}" target="_blank" class="news-link">Read Full Report →</a>
+                    <h3 class="news-title">${item.title}</h3>
+                    <div class="news-source">${item.source} ${item.country ? '- ' + item.country : ''}</div>
+                    <a href="${item.link}" target="_blank" class="news-link">Read More →</a>
                 </div>
             `;
         });
     }
 
-    if(document.getElementById('btn-filter-news')) {
-        document.getElementById('btn-filter-news').addEventListener('click', () => {
-            const start = document.getElementById('news-date-start').value;
-            const end = document.getElementById('news-date-end').value;
+    function hookDateFilter(btnId, startId, endId, sourceData, renderTarget, mapId, mapColor) {
+        const btn = document.getElementById(btnId);
+        if(!btn) return;
+        btn.addEventListener('click', () => {
+            const start = document.getElementById(startId).value;
+            const end = document.getElementById(endId).value;
             
-            let filtered = mockNews;
-            if(start) {
-                filtered = filtered.filter(n => new Date(n.date) >= new Date(start));
-            }
-            if(end) {
-                filtered = filtered.filter(n => new Date(n.date) <= new Date(end));
-            }
-            renderNews(filtered);
+            let filtered = sourceData;
+            if(start) filtered = filtered.filter(n => new Date(n.date) >= new Date(start));
+            if(end) filtered = filtered.filter(n => new Date(n.date) <= new Date(end));
+            
+            renderFeed(filtered, renderTarget);
+            if(googleChartsLoaded) drawMap(filtered, mapId, mapColor);
         });
     }
 
-    navExport.addEventListener('click', () => {
-        // Trigger CSV Download
-        setActiveNav(navOverview); 
-        
-        // Build CSV string
-        let csvContent = "data:text/csv;charset=utf-8,";
-        csvContent += "Asset Name,Sector,Country,Decommissioning Year,Estimated Value (Mil EUR),Risk Status\\n";
-        
-        mockData.forEach(function(row) {
-            // encapsulate strings in quotes in case of commas
-            const rowStr = `"${row.name}","${row.sector}","${row.country}",${row.year},${row.value},"${row.risk}"`;
-            csvContent += rowStr + "\\n";
+    hookDateFilter('btn-filter-news', 'news-date-start', 'news-date-end', mockNews, 'news-feed', 'news-map', '#993584');
+    hookDateFilter('btn-filter-tenders', 'tenders-date-start', 'tenders-date-end', mockTenders, 'tenders-feed', 'tenders-map', '#3265aa');
+
+    // 6. Google GeoCharts Integration for Heatmaps
+    let googleChartsLoaded = false;
+    if(typeof google !== 'undefined') {
+        google.charts.load('current', { 'packages':['geochart'] });
+        google.charts.setOnLoadCallback(() => {
+            googleChartsLoaded = true;
+            // Draw map if currently on a map view (failsafe)
+            if(!document.getElementById('section-news').classList.contains('hidden')) {
+                drawMap(mockNews, 'news-map', '#993584');
+            } else if (!document.getElementById('section-tenders').classList.contains('hidden')) {
+                drawMap(mockTenders, 'tenders-map', '#3265aa');
+            }
         });
-        
-        const encodedUri = encodeURI(csvContent);
-        const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "Target_Assets_Decommissioning_Report.csv");
-        document.body.appendChild(link); // Required for Firefox
-        link.click();
-        document.body.removeChild(link);
-    });
+    }
+
+    function drawMap(data, containerId, heatColor) {
+        const container = document.getElementById(containerId);
+        if(!container) return;
+
+        const counts = {};
+        data.forEach(d => {
+            if(d.country) counts[d.country] = (counts[d.country] || 0) + 1;
+        });
+
+        const arrData = [['Country', 'Count']];
+        Object.entries(counts).forEach(([c, idx]) => arrData.push([c, idx]));
+
+        const dt = google.visualization.arrayToDataTable(arrData);
+        const options = {
+            region: '150', // Europe
+            displayMode: 'regions',
+            resolution: 'countries',
+            colorAxis: {colors: ['#e2e8f0', heatColor]},
+            backgroundColor: 'transparent',
+            datalessRegionColor: '#f8f9fa',
+            defaultColor: '#f8f9fa',
+        };
+
+        const chart = new google.visualization.GeoChart(container);
+        chart.draw(dt, options);
+    }
+
+    if(navExport) {
+        navExport.addEventListener('click', () => {
+            setActiveNav(navAssets);
+            toggleView('dashboard');
+            
+            let csvContent = "data:text/csv;charset=utf-8,";
+            csvContent += "Asset Name,Sector,Country,Decommissioning Year,Estimated Value (Mil EUR),Risk Status\\n";
+            mockData.forEach(function(row) {
+                const rowStr = `"${row.name}","${row.sector}","${row.country}",${row.year},${row.value},"${row.risk}"`;
+                csvContent += rowStr + "\\n";
+            });
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Target_Assets_Decommissioning_Report.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        });
+    }
 
 });

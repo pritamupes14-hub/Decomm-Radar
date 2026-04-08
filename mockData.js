@@ -84,7 +84,8 @@ const mockNews = [
         link: "https://www.offshorewind.biz/2025/11/19/decommissioning-journey-commences-for-germanys-first-offshore-wind-farm/",
         date: "2025-11-19",
         category: "End-of-Asset Life",
-        sector: "Wind"
+        sector: "Wind",
+        country: "Germany"
     },
     {
         id: 2,
@@ -93,7 +94,8 @@ const mockNews = [
         link: "#",
         date: "2026-03-12",
         category: "Permit End",
-        sector: "Oil & Gas"
+        sector: "Oil & Gas",
+        country: "United Kingdom"
     },
     {
         id: 3,
@@ -102,7 +104,8 @@ const mockNews = [
         link: "#",
         date: "2026-02-28",
         category: "Decommissioning Announcement",
-        sector: "Chemical"
+        sector: "Chemical",
+        country: "Germany"
     },
     {
         id: 4,
@@ -111,7 +114,8 @@ const mockNews = [
         link: "#",
         date: "2026-01-15",
         category: "Regulatory Update",
-        sector: "Wind"
+        sector: "Wind",
+        country: "Netherlands"
     },
     {
         id: 5,
@@ -120,7 +124,8 @@ const mockNews = [
         link: "#",
         date: "2025-12-04",
         category: "Decommissioning Announcement",
-        sector: "Petrochemical"
+        sector: "Petrochemical",
+        country: "United Kingdom"
     },
     {
         id: 6,
@@ -129,6 +134,70 @@ const mockNews = [
         link: "#",
         date: "2026-04-02",
         category: "End-of-Asset Life",
-        sector: "Oil & Gas"
+        sector: "Oil & Gas",
+        country: "United Kingdom"
+    }
+];
+
+const mockTenders = [
+    {
+        id: 1,
+        title: "IWB civil engineering work for gas decommissioning",
+        source: "Tender Impulse (Iwb industrial werke basel)",
+        link: "https://tenderimpulse.com/government-tenders/switzerland/iwb-civil-engineering-work-for-gas-decommissioning-12263741",
+        date: "2026-03-20",
+        category: "Civil Engineering",
+        sector: "Oil & Gas",
+        country: "Switzerland"
+    },
+    {
+        id: 2,
+        title: "Finalrave for first German offshore wind farm: Vattenfall starts preparing decommissioning tender",
+        source: "OffshoreWind.biz",
+        link: "https://www.offshorewind.biz/2025/10/10/finalrave-for-first-german-offshore-wind-farm-as-vattenfall-starts-preparing-decommissioning-tender/",
+        date: "2025-10-10",
+        category: "Dismantling",
+        sector: "Wind",
+        country: "Germany"
+    },
+    {
+        id: 3,
+        title: "Provision of Heavy Lift Vessel Services for Statfjord A Platform Decommissioning",
+        source: "GlobalTenders",
+        link: "#",
+        date: "2026-04-05",
+        category: "Heavy Lift",
+        sector: "Oil & Gas",
+        country: "Norway"
+    },
+    {
+        id: 4,
+        title: "Demolition and Site Clearance of Petrochemical Units at Antwerp Port",
+        source: "European Procurement Portal",
+        link: "#",
+        date: "2026-01-22",
+        category: "Demolition",
+        sector: "Petrochemical",
+        country: "Belgium"
+    },
+    {
+        id: 5,
+        title: "Environmental Remediation and Waste Management Services for Rotterdam Olefins #1",
+        source: "Tender Impulse",
+        link: "#",
+        date: "2026-02-14",
+        category: "Waste Management",
+        sector: "Chemical",
+        country: "Netherlands"
+    },
+    {
+        id: 6,
+        title: "Onshore Recycling Facility Contracting for Turbine Blades - Middelgrunden",
+        source: "Danish Government Procurement",
+        link: "#",
+        date: "2025-12-05",
+        category: "Recycling",
+        sector: "Wind",
+        country: "Denmark"
     }
 ];
