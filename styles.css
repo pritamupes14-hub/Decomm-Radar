@@ -238,3 +238,85 @@ h1, h2, h3, h4, .evalueserve-text-logo {
     .nav-links { display: none; }
     .main-content { padding: 1rem; }
 }
+
+/* --- EXTRA FILTERS --- */
+.filter-dropdown {
+    background: #f4f5f8;
+    border: 1px solid var(--border-soft);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    font-family: var(--font-body);
+}
+.filter-dropdown:focus { outline: none; border-color: var(--eval-red); }
+
+/* --- MEDIA MONITORING --- */
+.news-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+.news-header h2 { font-size: 1.8rem; color: var(--eval-dark-purple); font-weight: 800; }
+.news-filters { display: flex; gap: 1rem; align-items: center; }
+.news-filters label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+.filter-input-date {
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+.news-card {
+    background: #fff;
+    border: 1px solid var(--border-soft);
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow-soft);
+}
+.news-card:hover {
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-3px);
+}
+.news-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 600;
+}
+.news-title {
+    font-size: 1.1rem;
+    color: var(--eval-dark-purple);
+    font-weight: 700;
+    line-height: 1.4;
+}
+.news-source {
+    font-size: 0.85rem;
+    color: var(--accent-blue);
+    font-weight: 600;
+}
+.news-link {
+    margin-top: auto;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--eval-red);
+    text-decoration: none;
+}
+.news-link:hover { text-decoration: underline; }

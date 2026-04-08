@@ -75,3 +75,60 @@ const scanLogs = [
     "[CALCULATING] Estimating remediation values based on historic indices...",
     "[SUCCESS] Yield: 51 high-priority targets mapped. Rendering dashboard."
 ];
+
+const mockNews = [
+    {
+        id: 1,
+        title: "Decommissioning journey commences for Germany's first offshore wind farm",
+        source: "OffshoreWind.biz",
+        link: "https://www.offshorewind.biz/2025/11/19/decommissioning-journey-commences-for-germanys-first-offshore-wind-farm/",
+        date: "2025-11-19",
+        category: "End-of-Asset Life",
+        sector: "Wind"
+    },
+    {
+        id: 2,
+        title: "UK regulator NSTA orders decommissioning plans for aging Southern North Sea gas fields as permits expire",
+        source: "EnergyVoice",
+        link: "#",
+        date: "2026-03-12",
+        category: "Permit End",
+        sector: "Oil & Gas"
+    },
+    {
+        id: 3,
+        title: "BASF signals potential closure and dismantling of older chemical plants at Ludwigshafen site by 2027",
+        source: "ChemicalWatch",
+        link: "#",
+        date: "2026-02-28",
+        category: "Decommissioning Announcement",
+        sector: "Chemical"
+    },
+    {
+        id: 4,
+        title: "Dutch Government announces acceleration of North Sea wind park dismantling to free up critical zones",
+        source: "RechargeNews",
+        link: "#",
+        date: "2026-01-15",
+        category: "Regulatory Update",
+        sector: "Wind"
+    },
+    {
+        id: 5,
+        title: "Ineos initiates review for potential scale-down and decommissioning of legacy cracker units in Grangemouth",
+        source: "PetroChem Weekly",
+        link: "#",
+        date: "2025-12-04",
+        category: "Decommissioning Announcement",
+        sector: "Petrochemical"
+    },
+    {
+        id: 6,
+        title: "EnQuest accelerates timeline to decommission Heather and Thistle platforms ahead of 2026 deadlines",
+        source: "Upstream Online",
+        link: "#",
+        date: "2026-04-02",
+        category: "End-of-Asset Life",
+        sector: "Oil & Gas"
+    }
+];

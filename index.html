@@ -43,6 +43,7 @@
                     <li class="active"><button id="nav-overview" class="nav-btn">Overview</button></li>
                     <li><button id="nav-assets" class="nav-btn">Target Assets</button></li>
                     <li><button id="nav-sectors" class="nav-btn">Sectors</button></li>
+                    <li><button id="nav-news" class="nav-btn">Media Monitoring</button></li>
                     <li><button id="nav-export" class="nav-btn">Export Report</button></li>
                 </ul>
             </nav>
@@ -58,8 +59,10 @@
                     </div>
                 </header>
 
-                <!-- KPIs -->
-                <div class="kpi-grid">
+                <!-- Dashboard Core Views -->
+                <div id="dashboard-core-views">
+                    <!-- KPIs -->
+                    <div class="kpi-grid">
                     <div class="kpi-card glass">
                         <h3>High-Risk Assets Identified</h3>
                         <div class="kpi-value" id="kpi-total-assets">--</div>
@@ -98,13 +101,37 @@
                 <div class="table-container glass" id="section-assets">
                     <div class="table-header">
                         <h3>Most Promising Target Platforms</h3>
-                        <div class="filters">
-                            <button class="filter-btn active" data-filter="all">All</button>
-                            <button class="filter-btn" data-filter="Oil & Gas">Oil & Gas</button>
-                            <button class="filter-btn" data-filter="Wind">Wind</button>
-                            <button class="filter-btn" data-filter="Petrochemical">Petrochemical</button>
-                            <button class="filter-btn" data-filter="Chemical">Chemical</button>
-                            <button class="filter-btn" data-filter="Bioenergy">Bioenergy</button>
+                        <div class="filters" id="asset-filters">
+                            <select id="filter-year" class="filter-dropdown">
+                                <option value="all">All Years</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                                <option value="2029">2029</option>
+                                <option value="2030">2030</option>
+                                <option value="2031">2031</option>
+                            </select>
+                            <select id="filter-country" class="filter-dropdown">
+                                <option value="all">All Countries</option>
+                                <option value="UK">UK</option>
+                                <option value="Norway">Norway</option>
+                                <option value="Denmark">Denmark</option>
+                                <option value="Netherlands">Netherlands</option>
+                                <option value="Germany">Germany</option>
+                                <option value="Sweden">Sweden</option>
+                                <option value="Belgium">Belgium</option>
+                                <option value="Spain">Spain</option>
+                                <option value="France">France</option>
+                                <option value="Italy">Italy</option>
+                                <option value="Finland">Finland</option>
+                            </select>
+                            <select id="filter-sector" class="filter-dropdown">
+                                <option value="all">All Sectors</option>
+                                <option value="Oil & Gas">Oil & Gas</option>
+                                <option value="Wind">Wind</option>
+                                <option value="Petrochemical">Petrochemical</option>
+                                <option value="Chemical">Chemical</option>
+                                <option value="Bioenergy">Bioenergy</option>
+                            </select>
                         </div>
                     </div>
                     <table class="data-table">
@@ -122,6 +149,24 @@
                             <!-- Rows injected via JS -->
                         </tbody>
                     </table>
+                </div>
+                </div> <!-- End core views -->
+
+                <!-- Media Monitoring View (Hidden by default) -->
+                <div id="section-news" class="hidden">
+                    <div class="news-header">
+                        <h2>Industry Tracking & Policy Radar</h2>
+                        <div class="news-filters">
+                            <label for="news-date-start">From:</label>
+                            <input type="date" id="news-date-start" class="filter-input-date">
+                            <label for="news-date-end">To:</label>
+                            <input type="date" id="news-date-end" class="filter-input-date">
+                            <button id="btn-filter-news" class="btn primary-btn" style="padding: 0.5rem 1rem;">Filter Dates</button>
+                        </div>
+                    </div>
+                    <div class="news-grid" id="news-feed">
+                        <!-- Injected via JS -->
+                    </div>
                 </div>
             </section>
         </main>

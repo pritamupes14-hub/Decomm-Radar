@@ -51,8 +51,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // 2. Dashboard Logic
     let charts = {}; // To store chart instances for destroying on update
 
-    function initDashboard(filterSector = "all") {
-        const filteredData = filterSector === "all" ? mockData : mockData.filter(d => d.sector === filterSector);
+    function initDashboard() {
+        const yearFilter = document.getElementById('filter-year').value;
+        const countryFilter = document.getElementById('filter-country').value;
+        const sectorFilter = document.getElementById('filter-sector').value;
+        
+        let filteredData = mockData;
+        if(yearFilter !== 'all') filteredData = filteredData.filter(d => d.year.toString() === yearFilter);
+        if(countryFilter !== 'all') filteredData = filteredData.filter(d => d.country === countryFilter);
+        if(sectorFilter !== 'all') filteredData = filteredData.filter(d => d.sector === sectorFilter);
         
         updateKPIs(filteredData);
         renderCharts(filteredData);
@@ -240,16 +247,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Filter Logic
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            // Update active state
-            filterBtns.forEach(b => b.classList.remove('active'));
-            e.target.classList.add('active');
-            
-            // Re-render dashboard
-            const filter = e.target.getAttribute('data-filter');
-            initDashboard(filter);
+    const filters = ['filter-year', 'filter-country', 'filter-sector'];
+    filters.forEach(id => {
+        document.getElementById(id).addEventListener('change', () => {
+            initDashboard();
         });
     });
 
@@ -280,11 +281,28 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function getMBBAnalysis(item) {
+        let specificRisk = "";
+        let specificRec = "";
+        
+        if(item.sector === "Oil & Gas") {
+            specificRisk = "Well-plugging complexities and structural fatigue on the jacket in harsh North Sea conditions represent primary containment risks.";
+            specificRec = "Accelerate well P&A (Plug and Abandonment) strategy. Engage heavy-lift vessels early to lock in lower day-rates.";
+        } else if (item.sector === "Wind") {
+            specificRisk = "End-of-life turbine blade degradation and foundation scouring pose immediate marine hazards.";
+            specificRec = "Evaluate partial repowering potential vs. full removal. Focus on composite blade recycling partnerships.";
+        } else if (item.sector === "Chemical" || item.sector === "Petrochemical") {
+            specificRisk = "Soil contamination, residual toxic inventories, and stringent REACH directives create massive environmental liability.";
+            specificRec = "Initiate Phase II Environmental Site Assessment immediately. Isolate process units to minimize ongoing OPEX.";
+        } else {
+            specificRisk = "Regulatory permit expirations and boiler/reactor lifecycle caps require structured decommissioning.";
+            specificRec = "Transition asset to care-and-maintenance mode while securing vendor dismantle contracts.";
+        }
+
         return `
             <p><strong>Strategic Context:</strong> The ${item.name} facility located in ${item.country} represents a core legacy asset within the ${item.sector} portfolio. With its operational life projected to conclude by ${item.year}, the asset triggers critical regulatory and environmental compliance mandates.</p>
             <p><strong>Financial Implications:</strong> The estimated remediation liability of €${item.value}M poses a significant CAPEX/OPEX drain. Proactive decommissioning planning is required to optimize vendor contracting and mitigate inflationary pressures on dismantling costs.</p>
-            <p><strong>Risk Assessment:</strong> Assessed as a <strong>${item.risk} Risk</strong> priority. Deferred action exacerbates structural integrity risks and potential regulatory liabilities, which could result in severe reputational damage and punitive fines.</p>
-            <p><strong>Recommendation:</strong> Initiate Front-End Engineering Design (FEED) for the decommissioning phase immediately. Engage specialized advisory to evaluate circular economy avenues (e.g. materials recycling) to partially offset the overall operational closure costs.</p>
+            <p><strong>Risk Assessment:</strong> Assessed as a <strong>${item.risk} Risk</strong> priority. ${specificRisk}</p>
+            <p><strong>Recommendation:</strong> ${specificRec} Engage specialized advisory to evaluate circular economy avenues (e.g. materials recycling) to partially offset the overall closure costs.</p>
         `;
     }
 
@@ -298,36 +316,105 @@ document.addEventListener('DOMContentLoaded', () => {
     const navOverview = document.getElementById('nav-overview');
     const navAssets = document.getElementById('nav-assets');
     const navSectors = document.getElementById('nav-sectors');
+    const navNews = document.getElementById('nav-news');
     const navExport = document.getElementById('nav-export');
-    const navBtns = [navOverview, navAssets, navSectors, navExport];
+    const navBtns = [navOverview, navAssets, navSectors, navNews, navExport];
+
+    const dashboardCore = document.getElementById('dashboard-core-views');
+    const sectionNews = document.getElementById('section-news');
 
     function setActiveNav(btn) {
-        navBtns.forEach(b => b.parentElement.classList.remove('active'));
+        navBtns.forEach(b => {
+             if(b) b.parentElement.classList.remove('active');
+        });
         if(btn && btn !== navExport) btn.parentElement.classList.add('active');
+    }
+
+    function toggleView(view) {
+        if(view === 'dashboard') {
+            dashboardCore.classList.remove('hidden');
+            sectionNews.classList.add('hidden');
+        } else if (view === 'news') {
+            dashboardCore.classList.add('hidden');
+            sectionNews.classList.remove('hidden');
+            renderNews();
+        }
     }
 
     navOverview.addEventListener('click', () => {
         setActiveNav(navOverview);
+        toggleView('dashboard');
         document.querySelector('.main-content').scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     navSectors.addEventListener('click', () => {
         setActiveNav(navSectors);
+        toggleView('dashboard');
         const section = document.getElementById('section-sectors');
-        document.querySelector('.main-content').scrollTo({
-            top: section.offsetTop - 30,
-            behavior: 'smooth'
-        });
+        if(section) document.querySelector('.main-content').scrollTo({ top: section.offsetTop - 30, behavior: 'smooth' });
     });
 
     navAssets.addEventListener('click', () => {
         setActiveNav(navAssets);
+        toggleView('dashboard');
         const section = document.getElementById('section-assets');
-        document.querySelector('.main-content').scrollTo({
-            top: section.offsetTop - 30,
-            behavior: 'smooth'
-        });
+        if(section) document.querySelector('.main-content').scrollTo({ top: section.offsetTop - 30, behavior: 'smooth' });
     });
+
+    if(navNews) {
+        navNews.addEventListener('click', () => {
+            setActiveNav(navNews);
+            toggleView('news');
+        });
+    }
+
+    // 5. News Rendering & Date Filter Logic
+    function renderNews(filteredNews = mockNews) {
+        const feed = document.getElementById('news-feed');
+        if(!feed) return;
+        feed.innerHTML = '';
+        
+        if(filteredNews.length === 0) {
+            feed.innerHTML = '<p style="color:var(--text-muted); grid-column: 1/-1;">No news found for the selected date range.</p>';
+            return;
+        }
+
+        filteredNews.forEach(news => {
+            let badgeClass = 'bioenergy';
+            if(news.sector === 'Oil & Gas') badgeClass = 'oil';
+            if(news.sector === 'Wind') badgeClass = 'wind';
+            if(news.sector === 'Petrochemical') badgeClass = 'petrochemical';
+            if(news.sector === 'Chemical') badgeClass = 'chemical';
+
+            feed.innerHTML += `
+                <div class="news-card">
+                    <div class="news-meta">
+                        <span class="sector-badge ${badgeClass}">${news.category}</span>
+                        <span>${news.date}</span>
+                    </div>
+                    <h3 class="news-title">${news.title}</h3>
+                    <div class="news-source">${news.source}</div>
+                    <a href="${news.link}" target="_blank" class="news-link">Read Full Report →</a>
+                </div>
+            `;
+        });
+    }
+
+    if(document.getElementById('btn-filter-news')) {
+        document.getElementById('btn-filter-news').addEventListener('click', () => {
+            const start = document.getElementById('news-date-start').value;
+            const end = document.getElementById('news-date-end').value;
+            
+            let filtered = mockNews;
+            if(start) {
+                filtered = filtered.filter(n => new Date(n.date) >= new Date(start));
+            }
+            if(end) {
+                filtered = filtered.filter(n => new Date(n.date) <= new Date(end));
+            }
+            renderNews(filtered);
+        });
+    }
 
     navExport.addEventListener('click', () => {
         // Trigger CSV Download
