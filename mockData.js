@@ -79,6 +79,16 @@ const scanLogs = [
 const mockNews = [
     {
         id: 1,
+        title: "Finalrave for first German offshore wind farm as Vattenfall starts preparing decommissioning tender",
+        source: "OffshoreWind.biz",
+        link: "https://www.offshorewind.biz/2025/10/10/finalrave-for-first-german-offshore-wind-farm-as-vattenfall-starts-preparing-decommissioning-tender/",
+        date: "2025-10-10",
+        category: "Dismantling",
+        sector: "Wind",
+        country: "Germany"
+    },
+    {
+        id: 2,
         title: "Decommissioning journey commences for Germany's first offshore wind farm",
         source: "OffshoreWind.biz",
         link: "https://www.offshorewind.biz/2025/11/19/decommissioning-journey-commences-for-germanys-first-offshore-wind-farm/",
@@ -88,54 +98,24 @@ const mockNews = [
         country: "Germany"
     },
     {
-        id: 2,
-        title: "UK regulator NSTA orders decommissioning plans for aging Southern North Sea gas fields as permits expire",
-        source: "NSTA Official",
-        link: "https://www.nstauthority.co.uk/what-we-do/decommissioning-and-repurposing",
-        date: "2026-03-12",
-        category: "Permit End",
-        sector: "Oil & Gas",
-        country: "United Kingdom"
-    },
-    {
         id: 3,
-        title: "BASF signals potential closure and dismantling of older chemical plants at Ludwigshafen site by 2027",
-        source: "Reuters",
-        link: "https://www.reuters.com/business/basf-cuts-jobs-production-germany-2024-02-23/",
-        date: "2026-02-28",
+        title: "Global Maritime to decommission TetraSpar floater offshore Norway",
+        source: "OffshoreWind.biz",
+        link: "https://www.offshorewind.biz/2026/03/27/global-maritime-to-decommission-tetraspar-floater-offshore-norway/",
+        date: "2026-03-27",
         category: "Decommissioning Announcement",
-        sector: "Chemical",
-        country: "Germany"
+        sector: "Wind",
+        country: "Norway"
     },
     {
         id: 4,
-        title: "Dutch Government announces acceleration of North Sea wind park dismantling to free up critical zones",
-        source: "TNO Sustainable",
-        link: "https://www.tno.nl/en/sustainable/wind-energy/offshore-wind/decommissioning-wind-farms/",
-        date: "2026-01-15",
+        title: "Construction starts on OM base for Vattenfall's new German offshore wind farms",
+        source: "OffshoreWind.biz",
+        link: "https://www.offshorewind.biz/2026/01/19/construction-starts-on-om-base-for-vattenfalls-new-german-offshore-wind-farms/",
+        date: "2026-01-19",
         category: "Regulatory Update",
         sector: "Wind",
-        country: "Netherlands"
-    },
-    {
-        id: 5,
-        title: "Ineos initiates review for potential scale-down and decommissioning of legacy cracker units in Grangemouth",
-        source: "Reuters",
-        link: "https://www.reuters.com/business/energy/petroineos-close-scotlands-grangemouth-refinery-q2-2025-2024-09-12/",
-        date: "2025-12-04",
-        category: "Decommissioning Announcement",
-        sector: "Petrochemical",
-        country: "United Kingdom"
-    },
-    {
-        id: 6,
-        title: "EnQuest accelerates timeline to decommission Heather and Thistle platforms ahead of 2026 deadlines",
-        source: "EnQuest Official",
-        link: "https://www.enquest.com/operations/decommissioning/",
-        date: "2026-04-02",
-        category: "End-of-Asset Life",
-        sector: "Oil & Gas",
-        country: "United Kingdom"
+        country: "Germany"
     }
 ];
 
